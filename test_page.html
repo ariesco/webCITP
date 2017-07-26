@@ -1,20 +1,30 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>WebSocket demo</title>
+        <title>WebCITP</title>
     </head>
     <body>
         <script>
-            var ws = new WebSocket("ws://127.0.0.1:5678/"),
-                messages = document.createElement('ul');
+            ws = new WebSocket("ws://127.0.0.1:5678/");
             ws.onmessage = function (event) {
-                var messages = document.getElementsByTagName('ul')[0],
-                    message = document.createElement('li'),
-                    content = document.createTextNode(event.data);
-                message.appendChild(content);
-                messages.appendChild(message);
+                  alert('Mensaje recibido')
             };
-            document.body.appendChild(messages);
+
+            function show() {
+                 var file = document.getElementById('fileInput').files[0];
+                 if (file) {
+                     var reader = new FileReader();
+                     reader.readAsText(file);
+                     reader.onload = function(e) {
+                          // browser completed reading file
+                          ws.send(e.target.result + "\r\n\r\n");
+                     };
+                 }
+            }
         </script>
+        <form>
+            <input type="file" id="fileInput" accept=".maude">
+            <input onclick="show()" type="submit">
+        </form>
     </body>
 </html>
